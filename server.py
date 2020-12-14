@@ -1,7 +1,8 @@
+import os
 import discord
 from discord.ext import commands
 
-TOKEN = 'Nzg4MDk3NzY2MTU3MDU4MDk4.X9ejPQ.TlKThHUPMc_2dYWiswfAj-ouK6I'
+TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = 'BooBooBooBooB'
 intents = discord.Intents.default()
 intents.members = True
@@ -25,17 +26,24 @@ async def on_ready():
 
 @bot.command(name='siktir')
 @commands.has_role('ADKIR')
-async def create_channel(ctx, username='Poop'):
+async def sik_sik(ctx, *args):
+    username = ' '.join(args)
+    if not username:
+        await sik_core(ctx.guild, ctx.author.name)
+        await ctx.channel.send("Are you kidding? Gimme Username Mofo")
     print("started babe")
-    guild = ctx.guild
-    sik_channel = await guild.create_voice_channel('SikChan')
-    mover = None
+    await sik_core(ctx.guild, username)
+
+
+async def sik_core(guild, username):
+    sik_user = None
     for user in guild.members:
         if user.name == username:
-            mover = user
-    if not mover:
+            sik_user = user
+    if not sik_user:
         return
-    await mover.move_to(sik_channel)
+    sik_channel = await guild.create_voice_channel('SikChan')
+    await sik_user.move_to(sik_channel)
     await sik_channel.delete()
 
 
