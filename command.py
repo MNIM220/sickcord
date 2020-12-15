@@ -54,7 +54,7 @@ async def sik_sik(ctx, *args):
     await message.add_reaction("👍")
     await message.add_reaction("👎")
 
-    vote_time = 5
+    vote_time = 10
     while vote_time >= 0:
         if vote_time == 0:
             await message.edit(content=sik_message + "\nVote time expired.")
