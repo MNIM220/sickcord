@@ -54,7 +54,7 @@ async def sik_sik(ctx, *args):
         await sik_core(ctx.guild, ctx.author.name)
         await ctx.channel.send("She is not in Voice so\nVoted off ez")
         return
-    sik_message = f'can we please sik this {username} **** ?'
+    sik_message = f'can we please sik this {username} \**** ?'
     message = await ctx.channel.send(sik_message)
     await message.add_reaction("👍")
     await message.add_reaction("👎")
@@ -68,15 +68,19 @@ async def sik_sik(ctx, *args):
         vote_time -= 1
         time.sleep(1)
     message = await ctx.fetch_message(message.id)
+    boi_action = False
     for reaction in message.reactions:
         async for user in reaction.users():
             if ctx.me.id == user.id:
                 continue
             if reaction.emoji == "👎":
                 if user.name == username:
-                    await ctx.channel.send('{1.emoji} {0}, Who asked you?.'.format(user.name, reaction))
+                    boi_action = True
+                    await ctx.channel.send('{1.emoji} {0}, Who asked you?'.format(user.name, reaction))
                 else:
-                    await ctx.channel.send('{1.emoji} {0}, F***boi alert.'.format(user.name, reaction))
+                    await ctx.channel.send('{1.emoji} {0}, F***boi alert'.format(user.name, reaction))
+    if boi_action:
+        message.reactions[1].count = message.reactions[1].count - 1
     if message.reactions[0].count > message.reactions[1].count:
         await sik_core(ctx.guild, username)
         await ctx.channel.send("SIKTIR\nVoted off ez")
@@ -85,6 +89,7 @@ async def sik_sik(ctx, *args):
 
 
 @bot.command(name='ultimate_sik')
+@commands.has_role('ADKIR')
 async def ultimate_sik(ctx):
     for vc in ctx.guild.voice_channels:
         for user in vc.members:
@@ -94,22 +99,15 @@ async def ultimate_sik(ctx):
 
 async def sik_core(guild, username):
     sik_user = None
-    for user in guild.members:
-        if user.name == username:
-            sik_user = user
+    for vc in guild.voice_channels:
+        for user in vc.members:
+            if user.name == username:
+                sik_user = user
     if not sik_user:
         return
     sik_channel = await guild.create_voice_channel('SikChan')
     await sik_user.move_to(sik_channel)
     await sik_channel.delete()
-
-
-@bot.command(name='join')
-async def joinvoice(ctx):
-    # """Joins your voice channel"""
-    author = ctx.message.author
-    voice_channel = author.voice_channel
-    vc = await bot.join_voice_channel(voice_channel)
 
 
 bot.run(TOKEN)
