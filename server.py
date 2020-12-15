@@ -47,8 +47,9 @@ async def sik_sik(ctx, *args):
         return
     not_there = False
     for vc in ctx.guild.voice_channels:
-        if username in vc.members:
-            not_there = True
+        for user in vc.members:
+            if username == user.name:
+                not_there = True
     if not not_there:
         await sik_core(ctx.guild, ctx.author.name)
         await ctx.channel.send("She is not in Voice so\nVoted off ez")
