@@ -1,7 +1,13 @@
+import os
 import time
+
+import discord
 from discord.ext import commands
-from server import bot
 from core import active, sik_core
+
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 
 @bot.command(name='siktir')
@@ -81,9 +87,8 @@ async def ultimate_sik(ctx, *args):
 @bot.command(name='activate')
 @commands.has_role('ADKIR')
 async def activate_bot(ctx, *args):
-    global is_active
-    if not is_active:
-        is_active = True
+    if os.getenv("DISCORD_BOT_IS_ACTIVE") == "deactive":
+        os.environ["DISCORD_BOT_IS_ACTIVE"] = "active"
         await ctx.channel.send("Activated")
     else:
         await ctx.channel.send("Are you siking with me?")
@@ -92,9 +97,8 @@ async def activate_bot(ctx, *args):
 @bot.command(name='deactivate')
 @commands.has_role('ADKIR')
 async def deactivate_bot(ctx, *args):
-    global is_active
-    if is_active:
-        is_active = False
+    if os.getenv("DISCORD_BOT_IS_ACTIVE") == "active":
+        os.environ["DISCORD_BOT_IS_ACTIVE"] = "deactive"
         await ctx.channel.send("Deactivated")
     else:
         await ctx.channel.send("Are you siking with me?")

@@ -1,17 +1,10 @@
+from command import *
 import os
 
-import discord
-from discord.ext import commands
 
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = 'Nzg4MDk3NzY2MTU3MDU4MDk4.X9ejPQ.a4TgBzyh7MpRiI0Gh9TaBOMlCbg'
 GUILD = 'BooBooBooBooB'
-is_active = True
-
-intents = discord.Intents.default()
-intents.members = True
-
-bot = commands.Bot(command_prefix='!', intents=intents)
-from command import *
+os.environ["DISCORD_BOT_IS_ACTIVE"] = "active"
 
 
 @bot.event
@@ -25,8 +18,8 @@ async def on_ready():
         f'{guild.name}(id: {guild.id})\n'
     )
 
-    members = '\n - '.join([member.name for member in guild.members])
-    print(f'Guild Members:\n - {members}')
+    guild_members = '\n - '.join([member.name for member in guild.members])
+    print(f'Guild Members:\n - {guild_members}')
 
 
 bot.run(TOKEN)

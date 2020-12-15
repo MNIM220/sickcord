@@ -1,9 +1,9 @@
-from server import is_active
+import os
 
 
 def active(func):
     async def wrapper(ctx, *args, **kwargs):
-        if is_active:
+        if os.getenv("DISCORD_BOT_IS_ACTIVE") == "active":
             return await func(ctx, *args, **kwargs)
         else:
             try:
