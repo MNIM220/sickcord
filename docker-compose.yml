@@ -5,3 +5,10 @@ services:
    restart: always
    environment:
      - DISCORD_TOKEN=token
+     - REDIS_HOST=localhost
+     - REDIS_PORT=6379
+  redis:
+    image: redis
+    restart: always
+    ports:
+    - 6379:6379
