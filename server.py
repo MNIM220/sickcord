@@ -2,7 +2,7 @@ from command import *
 import os
 
 
-TOKEN = 'Nzg4MDk3NzY2MTU3MDU4MDk4.X9ejPQ.a4TgBzyh7MpRiI0Gh9TaBOMlCbg'
+TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = 'BooBooBooBooB'
 os.environ["DISCORD_BOT_IS_ACTIVE"] = "active"
 
