@@ -10,7 +10,7 @@ intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 
-@bot.command(name='help')
+@bot.command(name='sik-help')
 async def helper(ctx, *args):
     await ctx.channel.send("!siktir\n"
                            "!sikvote\n"
