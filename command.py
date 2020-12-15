@@ -12,11 +12,12 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.command(name='sik-help')
 async def helper(ctx, *args):
-    await ctx.channel.send("!siktir\n"
-                           "!sikvote\n"
+    await ctx.channel.send("```!siktir <username>\n"
+                           "!sikvote <username>\n"
                            "!ultimate_sik\n"
                            "!activate\n"
-                           "!deactivate\n")
+                           "!deactivate\n"
+                           "!malme [multiplier] <username>\n```")
 
 
 @bot.command(name='siktir')
@@ -81,6 +82,16 @@ async def sik_sik(ctx, *args):
         await ctx.channel.send("SIKTIR\nVoted off ez")
     else:
         await ctx.channel.send("💀 💀 💀 Hmmm no disconnect for now\nbut its closer than what you think")
+
+
+@bot.command(name='malme')
+@active
+async def ultimate_sik(ctx, *args):
+    try:
+        for i in range(0, int(args[0])):
+            await ctx.channel.send(' '.join(args[1:]))
+    except:
+        await ctx.channel.send(' '.join(args))
 
 
 @bot.command(name='ultimate_sik')
