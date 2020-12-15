@@ -1,4 +1,6 @@
 import os
+import time
+
 import discord
 from discord.ext import commands
 
@@ -31,8 +33,62 @@ async def sik_sik(ctx, *args):
     if not username:
         await sik_core(ctx.guild, ctx.author.name)
         await ctx.channel.send("Are you kidding? Gimme Username Mofo")
+        return
     print("started babe")
     await sik_core(ctx.guild, username)
+
+
+@bot.command(name='sikvote')
+async def sik_sik(ctx, *args):
+    username = ' '.join(args)
+    if not username:
+        await sik_core(ctx.guild, ctx.author.name)
+        await ctx.channel.send("Learn NooB\nNo username given so\nVoted off ez")
+        return
+    not_there = False
+    for vc in ctx.guild.voice_channels:
+        if username in vc.members:
+            not_there = True
+    if not not_there:
+        await sik_core(ctx.guild, ctx.author.name)
+        await ctx.channel.send("She is not in Voice so\nVoted off ez")
+        return
+    sik_message = f'can we please sik this {username} **** ?'
+    message = await ctx.channel.send(sik_message)
+    await message.add_reaction("👍")
+    await message.add_reaction("👎")
+
+    vote_time = 5
+    while vote_time >= 0:
+        if vote_time == 0:
+            await message.edit(content=sik_message + "\nVote time expired.")
+            break
+        await message.edit(content=sik_message + "\n" + str(vote_time) + " seconds left...")
+        vote_time -= 1
+        time.sleep(1)
+    message = await ctx.fetch_message(message.id)
+    for reaction in message.reactions:
+        async for user in reaction.users():
+            if ctx.me.id == user.id:
+                continue
+            if reaction.emoji == "👎":
+                if user.name == username:
+                    await ctx.channel.send('{1.emoji} {0}, Who asked you?.'.format(user.name, reaction))
+                else:
+                    await ctx.channel.send('{1.emoji} {0}, F***boi alert.'.format(user.name, reaction))
+    if message.reactions[0].count > message.reactions[1].count:
+        await sik_core(ctx.guild, username)
+        await ctx.channel.send("SIKTIR\nVoted off ez")
+    else:
+        await ctx.channel.send("💀 💀 💀 Hmmm no disconnect for now\nbut its closer than what you think")
+
+
+@bot.command(name='ultimate_sik')
+async def ultimate_sik(ctx):
+    for vc in ctx.guild.voice_channels:
+        for user in vc.members:
+            await sik_core(ctx.guild, user.name)
+    await ctx.channel.send("All SIKTIR\nVoted off ez")
 
 
 async def sik_core(guild, username):
