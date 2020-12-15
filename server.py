@@ -6,8 +6,6 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = 'BooBooBooBooB'
 os.environ["DISCORD_BOT_IS_ACTIVE"] = "active"
 
-_redis = start_redis()
-
 
 @bot.event
 async def on_ready():

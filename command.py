@@ -1,13 +1,15 @@
 import os
 import time
-
+from random import randrange
 import discord
 from discord.ext import commands
-from core import active, sik_core
+from core import active, sik_core, start_redis, get_ttl_redis, set_redis
 
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
+
+redis_conn = start_redis()
 
 
 @bot.command(name='sik-help')
@@ -54,6 +56,7 @@ async def sik_sik(ctx, *args):
     message = await ctx.channel.send(sik_message)
     await message.add_reaction("👍")
     await message.add_reaction("👎")
+    await message.add_reaction("🕊")
 
     vote_time = 10
     while vote_time >= 0:
@@ -69,6 +72,21 @@ async def sik_sik(ctx, *args):
         async for user in reaction.users():
             if ctx.me.id == user.id:
                 continue
+            if reaction.emoji == "🕊":
+                expire = get_ttl_redis(str(user.id), redis_conn)
+                if expire <= 0:
+                    if randrange(100) == 85:
+                        await ctx.channel.send(
+                            "😮😮😮😮😮😮😮😮😮😮\nOh My F\***en G\*d\nRandom is here\n{0} - Unluky Babe :)".format(
+                                username))
+                        break
+                    set_redis(str(user.id), "temp", 3600, redis_conn)
+                    await ctx.channel.send(
+                        "malande alert\n{0} is a real malande\nyou cant veto for an hour\nVOTE AGAIN DONT WORRY".format(
+                            user.name))
+                    return
+                else:
+                    await ctx.channel.send('{0} - Veto on cool down Get F\****ed'.format(user.name))
             if reaction.emoji == "👎":
                 if user.name == username:
                     boi_action = True

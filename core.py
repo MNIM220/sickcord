@@ -32,12 +32,18 @@ redis_client = None
 
 
 def start_redis():
-    return redis.Redis(host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=1)
+    host = os.getenv("REDIS_HOST")
+    port = int(os.getenv("REDIS_PORT"))
+    return redis.Redis(host=host, port=port, db=1)
 
 
-def set_redis(key, value, client):
-    client.set(key, value)
+def set_redis(key, value, expire, client):
+    return client.set(key, value, ex=expire)
 
 
 def get_redis(key, client):
-    client.get(key)
+    return str(client.get(key))
+
+
+def get_ttl_redis(key, client):
+    return client.ttl(key)
