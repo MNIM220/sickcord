@@ -8,6 +8,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = 'BooBooBooBooB'
 intents = discord.Intents.default()
 intents.members = True
+is_active = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 
@@ -26,8 +27,22 @@ async def on_ready():
     print(f'Guild Members:\n - {members}')
 
 
+def active(func):
+    async def wrapper(ctx, *args, **kwargs):
+        if is_active:
+            return await func(ctx, *args, **kwargs)
+        else:
+            try:
+                await ctx.channel.send("This command is not active")
+            except:
+                pass
+
+    return wrapper
+
+
 @bot.command(name='siktir')
 @commands.has_role('ADKIR')
+@active
 async def sik_sik(ctx, *args):
     username = ' '.join(args)
     if not username:
@@ -39,6 +54,7 @@ async def sik_sik(ctx, *args):
 
 
 @bot.command(name='sikvote')
+@active
 async def sik_sik(ctx, *args):
     username = ' '.join(args)
     if not username:
@@ -90,11 +106,34 @@ async def sik_sik(ctx, *args):
 
 @bot.command(name='ultimate_sik')
 @commands.has_role('ADKIR')
-async def ultimate_sik(ctx):
+@active
+async def ultimate_sik(ctx, *args):
     for vc in ctx.guild.voice_channels:
         for user in vc.members:
             await sik_core(ctx.guild, user.name)
     await ctx.channel.send("All SIKTIR\nVoted off ez")
+
+
+@bot.command(name='activate')
+@commands.has_role('ADKIR')
+async def activate_bot(ctx, *args):
+    global is_active
+    if not is_active:
+        is_active = True
+        await ctx.channel.send("Activated")
+    else:
+        await ctx.channel.send("Are you siking with me?")
+
+
+@bot.command(name='deactivate')
+@commands.has_role('ADKIR')
+async def deactivate_bot(ctx, *args):
+    global is_active
+    if is_active:
+        is_active = False
+        await ctx.channel.send("Deactivated")
+    else:
+        await ctx.channel.send("Are you siking with me?")
 
 
 async def sik_core(guild, username):
