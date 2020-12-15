@@ -1,4 +1,5 @@
 import os
+import redis
 
 
 def active(func):
@@ -25,3 +26,18 @@ async def sik_core(guild, username):
     sik_channel = await guild.create_voice_channel('SikChan')
     await sik_user.move_to(sik_channel)
     await sik_channel.delete()
+
+
+redis_client = None
+
+
+def start_redis():
+    return redis.Redis(host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=1)
+
+
+def set_redis(key, value, client):
+    client.set(key, value)
+
+
+def get_redis(key, client):
+    client.get(key)

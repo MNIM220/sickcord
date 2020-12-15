@@ -10,6 +10,15 @@ intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 
+@bot.command(name='help')
+async def helper(ctx, *args):
+    await ctx.channel.send("!siktir\n"
+                           "!sikvote\n"
+                           "!ultimate_sik\n"
+                           "!activate\n"
+                           "!deactivate\n")
+
+
 @bot.command(name='siktir')
 @commands.has_role('ADKIR')
 @active
@@ -87,7 +96,7 @@ async def ultimate_sik(ctx, *args):
 @bot.command(name='activate')
 @commands.has_role('ADKIR')
 async def activate_bot(ctx, *args):
-    if os.getenv("DISCORD_BOT_IS_ACTIVE") == "deactive":
+    if os.getenv("DISCORD_BOT_IS_ACTIVE") == "inactive":
         os.environ["DISCORD_BOT_IS_ACTIVE"] = "active"
         await ctx.channel.send("Activated")
     else:
@@ -98,7 +107,7 @@ async def activate_bot(ctx, *args):
 @commands.has_role('ADKIR')
 async def deactivate_bot(ctx, *args):
     if os.getenv("DISCORD_BOT_IS_ACTIVE") == "active":
-        os.environ["DISCORD_BOT_IS_ACTIVE"] = "deactive"
+        os.environ["DISCORD_BOT_IS_ACTIVE"] = "inactive"
         await ctx.channel.send("Deactivated")
     else:
         await ctx.channel.send("Are you siking with me?")
