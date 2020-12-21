@@ -140,3 +140,9 @@ async def deactivate_bot(ctx, *args):
         await ctx.channel.send("Deactivated")
     else:
         await ctx.channel.send("Are you siking with me?")
+
+
+@bot.command(name='shutdown')
+@commands.has_role('ADKIR')
+async def shutdown(ctx, *args):
+    await bot.close()
