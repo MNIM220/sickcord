@@ -104,9 +104,12 @@ async def sik_sik(ctx, *args):
 
 @bot.command(name='malme')
 @active
-async def ultimate_sik(ctx, *args):
+async def malme(ctx, *args):
     try:
-        for i in range(0, int(args[0])):
+        multiplier = int(args[0])
+        if multiplier > 10:
+            multiplier = 10
+        for i in range(0, multiplier):
             await ctx.channel.send(' '.join(args[1:]))
     except:
         await ctx.channel.send(' '.join(args))
