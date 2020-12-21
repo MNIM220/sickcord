@@ -148,4 +148,4 @@ async def deactivate_bot(ctx, *args):
 @bot.command(name='shutdown')
 @commands.has_role('ADKIR')
 async def shutdown(ctx, *args):
-    await bot.close()
+    await ctx.bot.logout()
